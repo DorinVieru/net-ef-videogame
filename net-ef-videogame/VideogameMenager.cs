@@ -9,8 +9,8 @@ namespace net_ef_videogame
 {
     public class VideogameMenager
     {
-        public const string STRINGA_DI_CONNESSIONE = "Data Source=localhost; Initial Catalog=master; Integrated Security=True;";
-        public const string NOME_DATABASE = "videogames";
+        public const string STRINGA_DI_CONNESSIONE = "Data Source=localhost;Initial Catalog=db_games;Integrated Security=True;Pooling=False;Encrypt=True;TrustServerCertificate=True";
+        public const string NOME_DATABASE = "games";
 
         // FUNCTION PER INSERIRE UN NUOVO VIDEOGAME
         public static void InsertVideogame(string name, string overview, string releaseDate, DateTime createdAt, DateTime updatedAt, long softwareHouseId)
@@ -120,6 +120,24 @@ namespace net_ef_videogame
             {
                 throw new Exception("Il videogioco specificato non esiste.");
             }
+        }
+
+        public void InsertSoftwareHouse(string name, string taxId, string city, string country, DateTime createdAt, DateTime updatedAt)
+        {
+            using GamesContext context = new GamesContext();
+
+            SoftwareHouse softwareHouse = new SoftwareHouse
+            {
+                Name = name,
+                TaxId = taxId,
+                City = city,
+                Country = country,
+                CreatedAt = createdAt,
+                UpdatedAt = updatedAt
+            };
+
+            context.SoftwareHouses.Add(softwareHouse);
+            context.SaveChanges();
         }
     }
 }

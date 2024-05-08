@@ -16,9 +16,10 @@ namespace net_ef_videogame
                 Console.WriteLine("\n**************\nMenu:");
                 Console.WriteLine("1. Inserire un nuovo videogioco");
                 Console.WriteLine("2. Ricerca un videogioco per ID");
-                Console.WriteLine("3. Ricerca tutti i videogiochi aventi il nome contenente una determinata stringa");
+                Console.WriteLine("3. Ricerca tutti i videogiochi con un determinato nome o parte di esso");
                 Console.WriteLine("4. Cancella un videogioco");
-                Console.WriteLine("5. Chiudere il programma\n**************\n");
+                Console.WriteLine("5. Inserisci una nuova SoftwareHouse");
+                Console.WriteLine("6. Chiudere il programma\n**************\n");
                 Console.Write("Digita un numero per effettuare una scelta: ");
 
                 // SE L'INPUT è DIVERSO DA UN INTERO MOSTRA UN MESSAGGIO DI ERRORE E CONTINUA LA SCELTA
@@ -148,8 +149,43 @@ namespace net_ef_videogame
                             Console.WriteLine("ID non valido o non trovato. Riprova.");
                         }
                         break;
-
+                    
+                    // CREAZIONE NUOVA SOFTWARE HOUSE
                     case 5:
+                        Console.WriteLine("Inserisci i dettagli della nuova SoftwareHouse:");
+                        // NOME CON CONTROLLO
+                        Console.Write("Nome: ");
+                        string shName = Console.ReadLine();
+                        while (string.IsNullOrWhiteSpace(shName))
+                        {
+                            Console.WriteLine("Il nome non può essere vuoto. Riprova.");
+                            Console.Write("Nome: ");
+                            shName = Console.ReadLine();
+                        }
+                        // CF CON CONTROLLO
+                        Console.Write("Codice fiscale: ");
+                        string taxId = Console.ReadLine();
+                        while (string.IsNullOrWhiteSpace(taxId))
+                        {
+                            Console.WriteLine("Il codice fiscale non può essere vuoto. Riprova.");
+                            Console.Write("Codice fiscale: ");
+                            taxId = Console.ReadLine();
+                        }
+                        // CITTA'
+                        Console.Write("Città: ");
+                        string city = Console.ReadLine();
+                        // PAESE'
+                        Console.Write("Paese: ");
+                        string country = Console.ReadLine();
+                        // DATA DI CREAZIONE E AGGIORNAMENTO
+                        DateTime shCreatedAt = DateTime.Now;
+                        DateTime shUpdatedAt = DateTime.Now;
+                        // INSERIMENTO NELLA TABELLA
+                        manager.InsertSoftwareHouse(shName, taxId, city, country, shCreatedAt, shUpdatedAt);
+                        break;
+                     
+                    //CHIUSURA PROGRAMMA
+                    case 6:
                         Console.WriteLine("Programma chiuso con usccesso. Ciao ciao!");
                         break;
 
@@ -158,7 +194,7 @@ namespace net_ef_videogame
                         break;
                 }
 
-            } while (choice != 5);
+            } while (choice != 6);
         }
     }
 }
