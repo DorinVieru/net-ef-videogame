@@ -23,6 +23,7 @@ namespace net_ef_videogame
         public DateTime CreatedAt { get; set; }
         [Column("update_at")]
         public DateTime UpdatedAt { get; set; }
+        List<SoftwareHouse>? SoftwareHouseList { get; set; } // N-N con tabella SoftwareHouse
 
         // Costruttore vuoto
         public Games() { }
