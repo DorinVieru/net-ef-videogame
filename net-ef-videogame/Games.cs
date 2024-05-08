@@ -14,7 +14,7 @@ namespace net_ef_videogame
     [Index(nameof(GameId), IsUnique = true)]
     public class Games
     {
-        [Key] int GameId { get; set; }
+        [Key] public long GameId { get; set; }
         public string Name { get; set; }
         public string Overview { get; set; }
         [Column("release_date")]
