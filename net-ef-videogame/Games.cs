@@ -24,16 +24,23 @@ namespace net_ef_videogame
         [Column("update_at")]
         public DateTime UpdatedAt { get; set; }
 
-        // Costruttore
+        // Costruttore vuoto
+        public Games() { }
+
+        // COSTRUTTORE
         public Games(string name, string overview, string releaseDate, DateTime createdAt, DateTime updatedAt)
         {
-            Name = name;
-            Overview = overview;
-            ReleaseDate = releaseDate;
-            CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
+            this.Name = name;
+            this.Overview = overview;
+            this.ReleaseDate = releaseDate;
+            this.CreatedAt = createdAt;
+            this.UpdatedAt = updatedAt;
+        }
+
+        public override string ToString()
+        {
+            return $"- ID: {GameId} \n- Nome: {Name} \n- Descrizione: {Overview} \n- Data di rilascio {ReleaseDate} \n- Creato il: {CreatedAt} \n-Aggiornato il: {UpdatedAt}";
         }
     }
 
-    
 }
