@@ -10,7 +10,7 @@ namespace net_ef_videogame
 {
     public class GamesContext : DbContext
     {
-        private string SqlServer = "Data Source=localhost;Initial Catalog=db_games;Integrated Security=True;TrustServerCertificate=True";
+        private string SqlServer = "Data Source=localhost;Initial Catalog=db_games;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=True";
 
         public DbSet<Games> Games { get; set; }
         public DbSet<SoftwareHouse> SoftwareHouses { get; set; }

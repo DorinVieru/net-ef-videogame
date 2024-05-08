@@ -29,7 +29,7 @@ namespace net_ef_videogame
         public Games() { }
 
         // COSTRUTTORE
-        public Games(string name, string overview, string releaseDate, DateTime createdAt, DateTime updatedAt)
+        public Games(string name, string overview, string releaseDate, DateTime createdAt, DateTime updatedAt, long softwareHouseId)
         {
             this.Name = name;
             this.Overview = overview;
