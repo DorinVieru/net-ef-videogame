@@ -34,6 +34,7 @@ namespace net_ef_videogame
                     // INSERIMENTO DI UN NUOVO VIDEOGIOCO
                     case 1:
                         Console.WriteLine("Inserisci i dettagli del videogioco:");
+                        
                         // NOME CON IL RISPETTIVO CONTROLLO
                         Console.Write("Nome: ");
                         string name = Console.ReadLine();
@@ -43,6 +44,7 @@ namespace net_ef_videogame
                             Console.Write("Nome: ");
                             name = Console.ReadLine();
                         }
+                        
                         // DESCRIZIONE CON IL CORRISPETTIVO CONTROLLO
                         Console.Write("Descrizione: ");
                         string overview = Console.ReadLine();
@@ -52,6 +54,7 @@ namespace net_ef_videogame
                             Console.Write("Descrizione: ");
                             overview = Console.ReadLine();
                         }
+                        
                         // DATA DI RILASCIO CON IL RISPETTIVO CONTROLLO
                         string releaseDate = null;
                         while (true)
@@ -74,17 +77,25 @@ namespace net_ef_videogame
                                 Console.WriteLine("Formato data non valido. Inserisci la data nel formato dd-MM-yyyy. Riprova.");
                             }
                         }
+                        
                         // CREAZIONE DI CRETED AT E UPDATED AT
                         DateTime createdAt = DateTime.Now;
                         DateTime updatedAt = DateTime.Now;
+                        
                         // ID DELLA SOFTWARE HOUSE E RISPETTIVO CONTROLLO
-                        Console.Write("ID della software house: ");
+                        var softwareHouses = VideogameMenager.GetAllSoftwareHouses();
+                        Console.Write("Seleziona ID della software house (in base all'elenco che vedi di seguito):\n");
+                        // Ciclo la lista delle software house
+                        foreach (var sh in softwareHouses)
+                            Console.WriteLine($"{sh.SoftwareHouseId}. {sh.Name}");
+
                         int softwareHouseId;
                         while (!int.TryParse(Console.ReadLine(), out softwareHouseId))
                         {
                             Console.WriteLine("ID non valido. Riprova.");
                             Console.Write("ID della software house: ");
                         }
+                        
                         // INSERIMENTO DEL GIOCO NELLA TABELLA
                         VideogameMenager.InsertVideogame(name, overview, releaseDate, createdAt, updatedAt, softwareHouseId);
                         break;
