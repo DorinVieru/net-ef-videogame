@@ -23,7 +23,9 @@ namespace net_ef_videogame
         public DateTime CreatedAt { get; set; }
         [Column("update_at")]
         public DateTime UpdatedAt { get; set; }
-        List<SoftwareHouse>? SoftwareHouseList { get; set; } // N-N con tabella SoftwareHouse
+        [Column("software_house_id")]
+        public long SoftwareHouseId { get; set; }
+        public SoftwareHouse SoftwareHouse { get; set; }  // N-N con tabella SoftwareHouse
 
         // Costruttore vuoto
         public Games() { }
@@ -36,6 +38,7 @@ namespace net_ef_videogame
             this.ReleaseDate = releaseDate;
             this.CreatedAt = createdAt;
             this.UpdatedAt = updatedAt;
+            this.SoftwareHouseId = softwareHouseId;
         }
 
         public override string ToString()
