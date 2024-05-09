@@ -90,5 +90,11 @@ namespace net_ef_videogame
             context.SaveChanges();
         }
 
+        // FUNCTION PER MOSTRARE TUTTE LE SOFTWARE HOUSE
+        public static List<SoftwareHouse> GetAllSoftwareHouses()
+        {
+            using GamesContext context = new GamesContext();
+            return context.SoftwareHouses.ToList();
+        }
     }
 }
