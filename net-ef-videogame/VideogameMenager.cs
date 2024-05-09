@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -16,112 +17,61 @@ namespace net_ef_videogame
         public static void InsertVideogame(string name, string overview, string releaseDate, DateTime createdAt, DateTime updatedAt, long softwareHouseId)
         {
 
-            using SqlConnection connessioneSql = new SqlConnection(STRINGA_DI_CONNESSIONE);
+            using GamesContext context = new GamesContext();
 
-            try
-            {
-                connessioneSql.Open();
+            context.Add(new Games(name, overview, releaseDate, createdAt, updatedAt, softwareHouseId));
+            context.SaveChanges();
 
-                string query = @$"INSERT INTO {NOME_DATABASE} (name, overview, release_date, created_at, updated_at, software_house_id) 
-                             VALUES (@name, @overview, @releaseDate, @creation, @update, @softwareHouseID)";
-
-                using SqlCommand cmd = new SqlCommand(query, connessioneSql);
-                cmd.Parameters.Add(new SqlParameter("@name", name));
-                cmd.Parameters.Add(new SqlParameter("@overview", overview));
-                cmd.Parameters.Add(new SqlParameter("@releaseDate", releaseDate));
-                cmd.Parameters.Add(new SqlParameter("@creation", createdAt));
-                cmd.Parameters.Add(new SqlParameter("@update", updatedAt));
-                cmd.Parameters.Add(new SqlParameter("@softwareHouseID", softwareHouseId));
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception error)
-            {
-                Console.Write(error.ToString());
-            }
         }
 
         // FUNCTION PER TROVARE UN VIDEOGAME TRAMITE L'ID
-        public Games GetVideogameById(int id)
+        public Games GetVideogameById(long id)
         {
-            using SqlConnection connessioneSql = new SqlConnection(STRINGA_DI_CONNESSIONE);
-
-            string query = @$"SELECT * FROM {NOME_DATABASE} 
-                              WHERE id = @Id";
-            SqlCommand command = new SqlCommand(query, connessioneSql);
-            command.Parameters.AddWithValue("@Id", id);
-
-            connessioneSql.Open();
-            SqlDataReader reader = command.ExecuteReader();
-
-            if (reader.Read())
+            try
             {
-                return new Games
-                (
-                    name: reader["name"].ToString(),
-                    overview: reader["overview"].ToString(),
-                    releaseDate: reader["release_date"].ToString(),
-                    createdAt: (DateTime)reader["created_at"],
-                    updatedAt: (DateTime)reader["updated_at"],
-                    softwareHouseId: Convert.ToInt32(reader["software_house_id"])
-                );
+                using GamesContext context = new GamesContext();
+
+                return context.Games.Where(x => x.GameId == id).Include(x => x.SoftwareHouse).FirstOrDefault();
             }
-            else
+            catch (Exception ex)
             {
                 return null;
             }
+
         }
 
         // FUNCTION PER TROVARE UN VIDEOGAME IN BASE AL SUO NOME O PARTE DI ESSO
-        public List<Games> GetVideogamesByName(string searchGame)
+        public List<Games> GetVideogamesByName(string name)
         {
-            List<Games> videogames = new List<Games>();
-
-            using SqlConnection connessioneSql = new SqlConnection(STRINGA_DI_CONNESSIONE);
-
-            string query = @$"SELECT * FROM {NOME_DATABASE} 
-                                  WHERE name LIKE @SearchGame";
-            SqlCommand command = new SqlCommand(query, connessioneSql);
-            command.Parameters.AddWithValue("@SearchGame", "%" + searchGame + "%");
-
-            connessioneSql.Open();
-            SqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                videogames.Add(new Games
-                (
-                    name: reader["name"].ToString(),
-                    overview: reader["overview"].ToString(),
-                    releaseDate: reader["release_date"].ToString(),
-                    createdAt: (DateTime)reader["created_at"],
-                    updatedAt: (DateTime)reader["updated_at"],
-                    softwareHouseId: Convert.ToInt32(reader["software_house_id"])
-                ));
+                using GamesContext context = new GamesContext();
+
+                return context.Games.Where(x => x.Name.Contains(name)).ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
 
-            return videogames;
         }
 
         // FUNCTION PER CANCELLARE UN VIDEOGIOCO
-        public void DeleteVideogame(int id)
+        public void DeleteVideogame(long id)
         {
-            using SqlConnection connessioneSql = new SqlConnection(STRINGA_DI_CONNESSIONE);
+            var game = GetVideogameById(id);
+            
+            if (game != null)
+                return;
+                
+            using GamesContext context = new GamesContext();
 
-            string query = @$"DELETE FROM {NOME_DATABASE} 
-                                WHERE id = @Id";
-            SqlCommand command = new SqlCommand(query, connessioneSql);
-            command.Parameters.AddWithValue("@Id", id);
-
-            connessioneSql.Open();
-            int affectedRows = command.ExecuteNonQuery();
-
-            if (affectedRows == 0)
-            {
-                throw new Exception("Il videogioco specificato non esiste.");
-            }
+            context.Remove(game);
+            context.SaveChanges();
+ 
         }
 
+        //FUNCTION PER AGGIUNGERE UNA SOFTWARE HOUSE
         public void InsertSoftwareHouse(string name, string taxId, string city, string country, DateTime createdAt, DateTime updatedAt)
         {
             using GamesContext context = new GamesContext();
@@ -139,5 +89,6 @@ namespace net_ef_videogame
             context.SoftwareHouses.Add(softwareHouse);
             context.SaveChanges();
         }
+
     }
 }
